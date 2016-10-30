@@ -1,0 +1,14 @@
+*.DS_Store
+build
+*.iml
+*.ipr
+*.iws
+.idea
+.gradle
+tmp
+out
+*.pyc
+/classes
+.settings/
+.classpath
+.project
