@@ -19,6 +19,10 @@ import java.util.Arrays;
  * How would you address these problems?
  */
 public class GameOfLife {
+    private static final int[] dx = new int[] {-1, 0, 1, -1, 1, -1, 0, 1};
+    private static final int[] dy = new int[] {-1, -1, -1, 0, 0, 1, 1, 1};
+
+    // Use 2 bits to represent [nextState, currentState]
     // Time: O(mn) Space: O(1)
     public void gameOfLife(int[][] board) {
         int m = board.length;
@@ -28,29 +32,29 @@ public class GameOfLife {
             for (int j = 0; j < n; j++) {
                 int liveNeighbors = findLiveNeighbors(board, i, j);
                 if (board[i][j] == 0 && liveNeighbors == 3) {
-                    board[i][j] = 2;
-                } else if (board[i][j] == 1 && (liveNeighbors < 2 || liveNeighbors > 3)) {
-                    board[i][j] = -1;
+                    board[i][j] = 2; // 10
+                } else if (board[i][j] == 1 && liveNeighbors >= 2 && liveNeighbors <= 3) {
+                    board[i][j] = 3; // 11
                 }
             }
         }
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                board[i][j] = board[i][j] > 0 ? 1 : 0;
+                board[i][j] >>= 1;
             }
         }
     }
 
-    private int findLiveNeighbors(int[][] board, int i, int j) {
+    private int findLiveNeighbors(int[][] board, int row, int col) {
         int m = board.length, n = board[0].length, liveNeighbors = 0;
-        if (i > 0 && j > 0 && Math.abs(board[i-1][j-1]) == 1) liveNeighbors++;
-        if (i > 0 && Math.abs(board[i-1][j]) == 1) liveNeighbors++;
-        if (i > 0 && j < n-1 && Math.abs(board[i-1][j+1]) == 1) liveNeighbors++;
-        if (j > 0 && Math.abs(board[i][j-1]) == 1) liveNeighbors++;
-        if (j < n-1 && Math.abs(board[i][j+1]) == 1) liveNeighbors++;
-        if (i < m-1 && j > 0 && Math.abs(board[i+1][j-1]) == 1) liveNeighbors++;
-        if (i < m-1 && Math.abs(board[i+1][j]) == 1) liveNeighbors++;
-        if (i < m-1 && j < n-1 && Math.abs(board[i+1][j+1]) == 1) liveNeighbors++;
+        for (int i = 0; i < dx.length; i++) {
+            int r = row + dy[i];
+            int c = col + dx[i];
+            if (r < 0 || r >= m || c < 0 || c >= n) {
+                continue;
+            }
+            liveNeighbors += board[r][c] & 1;
+        }
         return liveNeighbors;
     }
 

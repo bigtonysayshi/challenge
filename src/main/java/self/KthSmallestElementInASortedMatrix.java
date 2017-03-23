@@ -10,18 +10,32 @@ import java.util.PriorityQueue;
  * Note:You may assume k is always valid, 1 ≤ k ≤ n^2.
  */
 public class KthSmallestElementInASortedMatrix {
-    // Time: O(n+k) Space: O(k)
+    // Time: O(klogk) Space: O(mn)
     public int kthSmallest(int[][] matrix, int k) {
-        int n = matrix.length;
-        PriorityQueue<Tuple> minHeap = new PriorityQueue<>();
-        for (int i = 0; i < n; i++) {
-            minHeap.add(new Tuple(0, i, matrix[0][i]));
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0 || k <= 0) {
+            return 0;
         }
-        for (int i = 0; i < k-1; i++) {
-            Tuple t = minHeap.poll();
-            if (t.x < n -1) minHeap.add(new Tuple(t.x+1, t.y, matrix[t.x+1][t.y]));
+        int n = matrix.length, m = matrix[0].length;
+        PriorityQueue<Entry> entryQueue = new PriorityQueue<Entry>();
+        entryQueue.offer(new Entry(0, 0, matrix[0][0]));
+        boolean[][] checked = new boolean[n][m];
+        checked[0][0] = true;
+
+        int[] dx = new int[]{0, 1};
+        int[] dy = new int[]{1, 0};
+
+        for (int i = 0; i < k -1; i++) {
+            Entry entry = entryQueue.poll();
+            for (int j = 0; j < 2; j++) {
+                int row = entry.row + dy[j];
+                int col = entry.col + dx[j];
+                if (row < n && col < m && !checked[row][col]) {
+                    checked[row][col] = true;
+                    entryQueue.offer(new Entry(row, col, matrix[row][col]));
+                }
+            }
         }
-        return minHeap.peek().val;
+        return entryQueue.peek().val;
     }
 
     public static void main(String[] args){
@@ -34,16 +48,19 @@ public class KthSmallestElementInASortedMatrix {
     }
 }
 
-class Tuple implements Comparable<Tuple> {
-    int x, y, val;
-    public Tuple(int x, int y, int val) {
-        this.x = x;
-        this.y = y;
+class Entry implements Comparable<Entry> {
+    int row;
+    int col;
+    int val;
+
+    public Entry(int row, int col, int val) {
+        this.row = row;
+        this.col = col;
         this.val = val;
     }
 
     @Override
-    public int compareTo(Tuple t) {
-        return this.val - t.val;
+    public int compareTo(Entry e) {
+        return this.val - e.val;
     }
 }

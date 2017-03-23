@@ -11,7 +11,7 @@ import java.util.Queue;
  * You may only use constant extra space.
  * You may assume that it is a perfect binary tree (ie, all leaves are at the same level, and every parent has two children).
  */
-public class PopulateNextRightPointersInEachNode {
+public class PopulatingNextRightPointersInEachNode {
     // Time: O(n) Space: O(1)
     public void connect(TreeLinkNode root) {
         TreeLinkNode levelStart = root;

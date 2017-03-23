@@ -10,7 +10,7 @@ import java.util.PriorityQueue;
  * Note: You may assume k is always valid, 1 ≤ k ≤ array's length.
  */
 public class KthLargestElementInAnArray {
-    // Time: O(nlogn) Space: O(k)
+    // Time: O(nlogk) Space: O(k)
     public int findKthLargest(int[] nums, int k) {
         PriorityQueue<Integer> minHeap = new PriorityQueue<>();
         for (int n : nums) {
