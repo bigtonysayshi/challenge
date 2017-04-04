@@ -24,7 +24,6 @@ public class CombinationSum4 {
         return counts[counts.length-1];
     }
 
-
     public static void main(String[] args){
         CombinationSum4 instance = new CombinationSum4();
         System.out.println(instance.combinationSum4(new int[]{1,2,3}, 4));

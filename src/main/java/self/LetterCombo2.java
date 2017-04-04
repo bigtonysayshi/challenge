@@ -31,7 +31,9 @@ public class LetterCombo2 {
         Set<String> results = new HashSet<>();
         int[] keys = buildKeys(digits);
 
-        addLetters(results, "", new StringBuilder(), keys, 0);
+//        addLetters(results, "", new StringBuilder(), keys, 0);
+        LCTrieNode root = buildTrie(DICT);
+        findSentences(results, "", keys, 0, root, root);
         return new ArrayList<>(results);
     }
 
@@ -63,17 +65,67 @@ public class LetterCombo2 {
         }
     }
 
+    private void findSentences(Set<String> results, String sentence, int[] keys, int idx, LCTrieNode trieRoot, LCTrieNode trieNode) {
+        if (idx == keys.length) {
+            if (trieNode == trieRoot) {
+                results.add(sentence);
+            }
+            return;
+        }
+
+        int key = keys[idx];
+        for (char c : KEY_MAP[key].toCharArray()) {
+            LCTrieNode nextNode = trieNode.children[c - 'a'];
+            if (nextNode == null) {
+                continue;
+            }
+            if (nextNode.word != null) {
+                findSentences(results, sentence + nextNode.word, keys, idx + 1, trieRoot, trieRoot);
+            }
+            findSentences(results, sentence, keys, idx + 1, trieRoot, nextNode);
+        }
+    }
+
+    private LCTrieNode buildTrie(Set<String> words) {
+        LCTrieNode root = new LCTrieNode();
+        for (String word : words) {
+            LCTrieNode current = root;
+            for (int i = 0; i < word.length(); i++) {
+                char c = word.charAt(i);
+                if (current.children[c - 'a'] == null) {
+                    current.children[c - 'a'] = new LCTrieNode();
+                }
+                current = current.children[c - 'a'];
+                if (i == word.length() - 1) {
+                    current.word = word;
+                }
+            }
+        }
+        return root;
+    }
+
     private boolean isWord(String word) {
         return DICT.contains(word);
     }
 
-    private boolean isPredix(String word) {
+    private boolean isPrefix(String word) {
         return true;
     }
+
     public static void main(String[] args){
         LetterCombo2 instance = new LetterCombo2();
         System.out.println(instance.letterCombinations("3767269"));
         System.out.println(instance.letterCombinations("3767"));
         System.out.println(instance.letterCombinations("269"));
+    }
+}
+
+class LCTrieNode {
+    String word;
+    LCTrieNode[] children;
+
+    public LCTrieNode() {
+        word = null;
+        children = new LCTrieNode[26];
     }
 }

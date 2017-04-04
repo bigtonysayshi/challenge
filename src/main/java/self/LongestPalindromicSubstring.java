@@ -40,5 +40,9 @@ public class LongestPalindromicSubstring {
         LongestPalindromicSubstring instance = new LongestPalindromicSubstring();
         System.out.println(instance.longestPalindrome("babad"));
         System.out.println(instance.longestPalindrome("cbbd"));
+        System.out.println(instance.longestPalindrome("abcdzdcab"));
+        System.out.println(instance.longestPalindrome("ccc"));
+        System.out.println(instance.longestPalindrome("cccc"));
+        System.out.println(instance.longestPalindrome("bananas"));
     }
 }
