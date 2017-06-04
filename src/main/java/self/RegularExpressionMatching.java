@@ -18,16 +18,11 @@ public class RegularExpressionMatching {
             for (int j = 1; j <= n; j++) {
                 char c2 = p.charAt(j - 1);
                 if (c2 == '*') {
-                    if (dp[i][j - 2]) {
-                        dp[i][j] = true;
-                        if (i < m && (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i))) {
-                            dp[i + 1][j] = true;
-                        }
-                    } else if (i > 1 && dp[i - 1][j] &&
-                            (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i - 1))) {
-                        dp[i][j] = true;
+                    dp[i][j] = dp[i][j - 2];
+                    if (i > 0 && (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i - 1))) {
+                        dp[i][j] |= dp[i][j - 1];
+                        dp[i][j] |= dp[i - 1][j];
                     }
-
                 } else if (i > 0 && j > 0 && (c2 == '.' || c2 == s.charAt(i - 1))) {
                     dp[i][j] = dp[i - 1][j - 1];
                 }
